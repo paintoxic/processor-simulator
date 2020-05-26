@@ -10,15 +10,17 @@ class Processor():
         self.blocked = []
         self.executed = []
         self.completed = []
+        self.outfile = open('simulator.txt', 'w+')
 
     #Execute process and manipulate states, weigth and time execution
     def execute(self):
-        self.mapProcess();
+        self.mapProcess()
         while len(self.readiness) != 0:
             tempReadiness = self.readiness
             self.processExecution(tempReadiness)                
             self.createReadiness()            
             time.sleep(2)
+        self.outfile.close()    
             
     #Execute process create list of block or complete process        
     def processExecution(self,tempReadiness):
@@ -46,7 +48,7 @@ class Processor():
         for item in processList:
             item = json.dumps(item.__dict__)   
             mapedProcess.append(item) 
-        print(mapedProcess)  
+        return mapedProcess
 
     #Reduce weigth of process and increases exec time
     def addExecTime(self,item):
@@ -81,13 +83,25 @@ class Processor():
         print("------------------------------------")
         print()
         print("Readiness process")
-        self.printProcess(self.readiness)
+        print(self.printProcess(self.readiness))
         print()
         print("Blocked process")
-        self.printProcess(self.blocked)    
+        print(self.printProcess(self.blocked))    
         print()
         if(len(self.completed) != 0):
             print("Completed process")
-            self.printProcess(self.completed) 
+            print(self.printProcess(self.completed)) 
             print()    
         print("------------------------------------")
+        self.logProcessToFile()
+
+    def logProcessToFile(self):            
+        self.outfile.write("------------------------------------\n")
+        self.outfile.write("Readiness process\n")
+        self.outfile.write(str(self.printProcess(self.readiness)) + "\n")
+        self.outfile.write("Blocked process\n")
+        self.outfile.write(str(self.printProcess(self.blocked)) + "\n")
+        if(len(self.completed) != 0):
+            self.outfile.write("Completed process\n")
+            self.outfile.write(str(self.printProcess(self.completed)) + "\n")
+        self.outfile.write("------------------------------------\n")
