@@ -1,3 +1,4 @@
+# Class of process
 class Process():
 
     def __init__(self,data):

@@ -4,12 +4,12 @@ import json
 from processor import Processor
 
 def Captura():    
-    # try:
-    proces_list = json.loads(infoData.get("1.0", END))
-    processor = Processor(proces_list)
-    processor.execute()
-    # except Exception:        
-    #     vError("ERROR", "Lista de procesos errada")
+    try:
+        proces_list = json.loads(infoData.get("1.0", END))
+        processor = Processor(proces_list)
+        processor.execute()
+    except Exception:        
+        vError("ERROR", "Error al ejecutar o con la lista de procesos")
     
 
 def vError(T,MSG):

@@ -11,6 +11,7 @@ class Processor():
         self.executed = []
         self.completed = []
 
+    #Execute process and manipulate states, weigth and time execution
     def execute(self):
         self.mapProcess();
         while len(self.readiness) != 0:
@@ -19,6 +20,7 @@ class Processor():
             self.createReadiness()            
             time.sleep(2)
             
+    #Execute process create list of block or complete process        
     def processExecution(self,tempReadiness):
         for item in tempReadiness:
             weigth = item.weigth                 
@@ -30,6 +32,7 @@ class Processor():
                 self.blockProcess(item)
                 return
 
+    #Convert process give by user to Process obj that easer manipulate
     def mapProcess(self):
         mapedProcess = []
         for item in self.readiness:
@@ -37,6 +40,7 @@ class Processor():
             mapedProcess.append(item)
         self.readiness = mapedProcess    
 
+    #Convert Process Obj to JSON Objs and print
     def printProcess(self,processList):
         mapedProcess = []
         for item in processList:
@@ -44,16 +48,20 @@ class Processor():
             mapedProcess.append(item) 
         print(mapedProcess)  
 
+    #Reduce weigth of process and increases exec time
     def addExecTime(self,item):
         item.weigth = item.weigth - 1
         item.execTime = item.execTime + 1
         return item   
 
+    #Add process to complete list when this its completed, and remove process of readiness list
     def completeProcess(self,item):
         ind = self.readiness.index(item)
         processComplete = self.readiness.pop(ind)
         self.completed.append(processComplete)  
 
+    #Create a random number to determine if a process pass to block
+    #If block process : Remove this of readiness list
     def blockProcess(self,item):
         blockCriter = random.randrange(10)
         if (blockCriter >= 5):
@@ -62,11 +70,13 @@ class Processor():
             blockedProcess = self.readiness.pop(ind)
             self.blocked.append(blockedProcess)             
         
+    #Create readiness list from concat blocked list and actual readiness list    
     def createReadiness(self):
         self.logProcess()    
         self.readiness = self.readiness + self.blocked         
         self.blocked = []
 
+    #Logging
     def logProcess(self):
         print("------------------------------------")
         print()
